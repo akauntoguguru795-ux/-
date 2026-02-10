@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>MP3 Transcriber Pro｜英日対応 文字起こし</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">🎧</div>
+      <div>
+        <h1>MP3 Transcriber Pro</h1>
+        <p>英語/日本語対応・iPad最適化・複数ファイル一括文字起こし</p>
+      </div>
+    </div>
+    <div class="lang-switch">
+      <button class="pill" data-lang="ja">日本語</button>
+      <button class="pill" data-lang="en">English</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h2 data-i18n="title_upload">ファイル取り込み</h2>
+      <div id="dropZone" class="drop-zone" role="button" aria-label="MP3を追加">
+        <div class="drop-inner">
+          <div class="icon">⬇️</div>
+          <div>
+            <p class="primary" data-i18n="drop_primary">MP3ファイルをドラッグ&ドロップ</p>
+            <p class="secondary" data-i18n="drop_secondary">または下のボタンで選択</p>
+          </div>
+        </div>
+        <input id="fileInput" type="file" accept="audio/mpeg,.mp3" multiple hidden>
+        <button id="selectBtn" class="btn">ファイルを選択</button>
+      </div>
+
+      <div class="limits">
+        <div>
+          <label data-i18n="max_files">最大同時ファイル数</label>
+          <input id="maxFiles" type="number" min="1" max="20" value="8">
+        </div>
+        <div>
+          <label data-i18n="max_size">最大ファイルサイズ (MB)</label>
+          <input id="maxSize" type="number" min="10" max="200" value="120">
+        </div>
+        <div>
+          <label data-i18n="language">文字起こし言語</label>
+          <select id="language">
+            <option value="auto">Auto</option>
+            <option value="ja">日本語</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+        <div>
+          <label data-i18n="response">出力形式</label>
+          <select id="responseFormat">
+            <option value="text">text</option>
+            <option value="json">json</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="queue-actions">
+        <button id="startBtn" class="btn primary">文字起こし開始</button>
+        <button id="stopBtn" class="btn ghost">停止</button>
+        <button id="clearBtn" class="btn danger">全クリア</button>
+      </div>
+
+      <div id="queue" class="queue"></div>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="title_settings">API設定</h2>
+      <div class="settings">
+        <div>
+          <label data-i18n="provider">APIタイプ</label>
+          <select id="provider">
+            <option value="demo">デモ（API不要）</option>
+            <option value="openai">OpenAI互換（Whisper系）</option>
+            <option value="custom">カスタムフォーム送信</option>
+          </select>
+        </div>
+        <div>
+          <label data-i18n="endpoint">エンドポイント</label>
+          <input id="endpoint" type="url" placeholder="https://example.com/v1/audio/transcriptions">
+        </div>
+        <div>
+          <label data-i18n="apikey">APIキー</label>
+          <input id="apiKey" type="password" placeholder="sk-...">
+        </div>
+        <div>
+          <label data-i18n="model">モデル名</label>
+          <input id="model" type="text" placeholder="whisper-1 / large-v3">
+        </div>
+        <div>
+          <label data-i18n="temperature">温度</label>
+          <input id="temperature" type="number" min="0" max="1" step="0.1" value="0">
+        </div>
+        <div>
+          <label data-i18n="auto_save">自動保存</label>
+          <select id="autoSave">
+            <option value="on">ON</option>
+            <option value="off">OFF</option>
+          </select>
+        </div>
+      </div>
+      <div class="note">
+        <p>※ 本サイトは<strong>ブラウザのみ</strong>で動作します。APIキーやエンドポイントはご自身で準備してください。</p>
+        <ul>
+          <li>OpenAI互換APIの場合: <code>file</code>, <code>model</code>, <code>language</code>, <code>response_format</code> をフォーム送信</li>
+          <li>100MB級はネットワーク状況により失敗することがあります</li>
+          <li>iPadメモリに依存します。重い場合は同時数を減らしてください</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 data-i18n="title_results">文字起こし結果</h2>
+      <div class="result-actions">
+        <button id="copyAllBtn" class="btn">全結果コピー</button>
+        <button id="downloadAllBtn" class="btn">全結果ダウンロード</button>
+        <button id="clearHistoryBtn" class="btn danger">履歴削除</button>
+      </div>
+      <div id="results" class="results"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>MP3 Transcriber Pro • iPad最適化 • LocalStorage対応</small>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
+
